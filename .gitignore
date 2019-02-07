@@ -13,3 +13,4 @@ tic-tac-clap-test-*
 *.o
 *.obj
 *.lst
+.vs
