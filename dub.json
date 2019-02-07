@@ -1,0 +1,9 @@
+{
+	"authors": [
+		"Matt Young"
+	],
+	"copyright": "Copyright © 2019, Matt Young",
+	"description": "Simple tic tac toe implementation with minimax solver",
+	"license": "MIT",
+	"name": "tic-tac-clap"
+}

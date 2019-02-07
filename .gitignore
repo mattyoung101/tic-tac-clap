@@ -1,0 +1,15 @@
+.dub
+docs.json
+__dummy.html
+docs/
+/tic-tac-clap
+tic-tac-clap.so
+tic-tac-clap.dylib
+tic-tac-clap.dll
+tic-tac-clap.a
+tic-tac-clap.lib
+tic-tac-clap-test-*
+*.exe
+*.o
+*.obj
+*.lst
