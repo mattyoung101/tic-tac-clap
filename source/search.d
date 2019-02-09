@@ -11,7 +11,11 @@ class Node {
     int losses;
     /** used only so the AI player can sort properly **/
     int moveId;
-    int depth = 69;
+    int depth;
+    /** if this node is the root node, then it contains the shortest depth to a win out of all children **/
+    int depthToWin = 999;
+    /** if this is the root node, then the shortest depth to a loss out of all children **/
+    int depthToLoss = 999;
 
     this(){}
     this(Bitboard b, Node p, int d){
@@ -25,12 +29,15 @@ class Node {
         totalMovesEvaluated++;
         
         if (board.isNoughtWinner()){
-            propagateWin();
-            //writeln("Found win at depth ", depth);
+            getRoot().wins++;
+            updateWinDepth();
         } else if (board.isCrossWinner()){
-            propagateLoss();
+            getRoot().losses++;
+            updateLossDepth();
         } else if (board.isDraw()){
-            propagateWin();
+            // in this case, draws are losses
+            getRoot().losses++;
+            updateLossDepth();
         } else {
             // get available cells
             auto available = board.crossBB | board.noughtBB; 
@@ -56,23 +63,27 @@ class Node {
         }
     }
 
-    /** notifies the root node that there is a potential win here **/
-    void propagateWin(){
-        if (parent !is null){
-            parent.propagateWin();
-        } else {
-            // writeln("Found winner to propagate");
-            wins++;
+    /** calling this function after a win will notify the root node that this node has the shortest depth to win if applicable **/
+    private void updateWinDepth(){
+        auto root = getRoot();
+        if (root.depthToWin > this.depth){
+            root.depthToWin = this.depth;
         }
     }
 
-    /** notifies the root node that there is a potential loss here **/
-    void propagateLoss(){
-        if (parent !is null){
-            parent.propagateLoss();
+    private void updateLossDepth(){
+        auto root = getRoot();
+        if (root.depthToLoss > this.depth){
+            root.depthToLoss = this.depth;
+        }
+    }
+
+    // TODO this is slow, we should pass the root depth
+    private Node getRoot(){
+        if (parent is null){
+            return this;
         } else {
-            // writeln("Found loser to propagate");
-            losses++;
+            return parent.getRoot();
         }
     }
 
@@ -88,9 +99,28 @@ class Node {
     /** used for sorting **/
     int opCmp(ref const Node other) const {
         // sort by scoring
-        // immutable auto myScore = this.getScore();
-        // immutable auto otherScore = other.getScore();
+        immutable auto myScore = this.getScore();
+        immutable auto otherScore = other.getScore();
 
+        // pick longest depth to loss (try to draw out the game)
+        // just discovered this thorugh trying different ranking algorithms, but this seems to work by trying
+        // to draw out the games to be long instead of short by picking moves which are really far from a loss
+        if (this.depthToLoss > other.depthToLoss){
+            return 1;
+        } else if (this.depthToLoss < other.depthToLoss){
+            return -1;
+        } else {
+            // tiebreaker, return highest score
+            if (myScore > otherScore){
+                return 1;
+            } else if (myScore < otherScore){
+                return -1;
+            } else {
+                return 0;
+            }
+        }
+
+        // pick the highest score
         // if (myScore > otherScore){
         //     return 1;
         // } else if (myScore < otherScore){
@@ -99,21 +129,28 @@ class Node {
         //     return 0;
         // }
 
-        // minimise our losses
-        if (losses < other.losses){
-            return 1;
-        } else if (losses > other.losses){
-            return -1;
-        } else {
-            // tie breaker #1: number of wins
-            if (wins > other.wins){
-                return 1;
-            } else if (wins < other.wins){
-                return -1;
-            } else {
-                // TODO tiebreaker #2: depth
-                return 0;
-            }
-        }
+        // // minimise our losses
+        // if (losses < other.losses){
+        //     return 1;
+        // } else if (losses > other.losses){
+        //     return -1;
+        // } else {
+        //     // hack to detect if it's an instant victory, TODO in future use depth
+        //     if (wins == 1 && losses == 0){
+        //         return 1; // we can win, we're better
+        //     } else if (other.wins == 1 && other.losses == 0){
+        //         return -1; // other can win, we're worse
+        //     }
+
+        //     // tie breaker #1: number of wins
+        //     if (wins > other.wins){
+        //         return 1;
+        //     } else if (wins < other.wins){
+        //         return -1;
+        //     } else {
+        //         // TODO tiebreaker #2: depth
+        //         return 0;
+        //     }
+        // }
     }
 }

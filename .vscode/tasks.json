@@ -14,9 +14,9 @@
         {
             "label": "dub run",
             "type": "shell",
-            "command": "dub run",
+            "command": "dub run --arch=x86_64",
             "windows": {
-                "command": "dub run"
+                "command": "dub run --arch=x86_64"
             },
             "group": "build",
             "presentation": {

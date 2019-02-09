@@ -13,7 +13,7 @@ void main(){
 	auto humanPlayer = new HumanPlayer;
 	auto aiPlayer = new AIPlayer;
 	
-	writeln("Tic Tac Clap v0.2 - a tic tac toe program in D");
+	writeln("Tic Tac Clap v0.3 - a tic tac toe program in D");
 	writeln("(c) 2019 Matt Young, MIT license.");
 	auto isAITurn = input("Would you like to go first (y/n)? ") != "y";
 

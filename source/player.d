@@ -55,11 +55,13 @@ class AIPlayer : Player {
 
                 auto node = new Node(playedOutPosition, null, 0);
                 node.moveId = i;
-                node.depth = 0;
-                node.search(true);
+                node.search(false); // we've already made the move, AI cannot play again
 
-                writeln("Finished searching node #", i, ": wins: ", node.wins, " losses: ", node.losses, " score: ", 
-                        node.getScore());
+                writeln("Node #", i, ": wins: ", node.wins, ", losses: ", node.losses, ", probability: ", 
+                        node.getScore(), "%, depth to win: ", 
+                        node.depthToWin == 999 ? "impossible" : to!string(node.depthToWin), ", depth to loss: ", 
+                        node.depthToLoss == 999 ? "impossible" : to!string(node.depthToLoss));
+                //playedOutPosition.prettyPrint();
                 moves ~= node;
             }
         }
@@ -68,7 +70,7 @@ class AIPlayer : Player {
         reverse(moves); // sort does lowest to highest but we want highest to lowest, so reverse it
         Node bestMove = moves[0];
 
-        writeln("Best move is ", bestMove.moveId, " with a score of ", bestMove.getScore());
+        writeln("Best move is ", bestMove.moveId, " with a probability of ", bestMove.getScore(), "%");
         
         sw.stop();
         auto secondsTotal = to!float(sw.peek.total!"msecs") / 1000.0;

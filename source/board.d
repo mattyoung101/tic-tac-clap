@@ -1,15 +1,17 @@
 import std.bitmanip : BitArray;
 import std.stdio;
 
+// TODO make this a struct
 class Bitboard {
 	BitArray noughtBB;
 	BitArray crossBB;
 	private BitArray draw;
 	// see https://softwareengineering.stackexchange.com/a/263489
-	private uint[] winStates = [292, 146, 73, 448, 56, 7, 273, 84];
+	private ulong[] winStates = [292, 146, 73, 448, 56, 7, 273, 84];
 
 	/** Creates a new bitboard by setting up the bit arrays **/
 	this(){
+		// due to bullshit, we cannot create BitArrays at compile time, see: https://forum.dlang.org/post/ffxbmjqeigtcnhmbgbsn@forum.dlang.org
 		noughtBB = BitArray(new bool[9]);
 		crossBB = BitArray(new bool[9]);
 		draw = BitArray([1, 1, 1, 1, 1, 1, 1, 1, 1]);
@@ -19,7 +21,6 @@ class Bitboard {
 	this(Bitboard other){
 		noughtBB = other.noughtBB.dup();
 		crossBB = other.crossBB.dup();
-		// pisses me off that this shit can't be defined in the class? TODO seriously find a way
 		draw = BitArray([1, 1, 1, 1, 1, 1, 1, 1, 1]);
 	}
 
@@ -29,6 +30,7 @@ class Bitboard {
 		for (int i = 0; i < 9; i++){
 			immutable bool hasNought = noughtBB[i];
 			immutable bool hasCross = crossBB[i];
+			
 			if (hasNought){
 				write("O | ");
 			} else if (hasCross){
@@ -52,7 +54,7 @@ class Bitboard {
 	bool isNoughtWinner(){
 		foreach (ref winState; winStates){
 			// turns the decimal representation of the binary bitboard into a BitArray
-			auto winStateBB = BitArray(9u, &winState);
+			auto winStateBB = BitArray(9UL, &winState);
 
 			if ((winStateBB & noughtBB) == winStateBB){
 				return true;
@@ -64,7 +66,7 @@ class Bitboard {
 	/** Determines if the cross bitboard is in the winning state **/
 	bool isCrossWinner(){
 		foreach (ref winState; winStates){
-			auto winStateBB = BitArray(9u, &winState);
+			auto winStateBB = BitArray(9UL, &winState);
 
 			if ((winStateBB & crossBB) == winStateBB){
 				return true;
