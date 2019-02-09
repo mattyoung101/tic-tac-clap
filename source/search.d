@@ -36,8 +36,8 @@ class Node {
             updateLossDepth();
         } else if (board.isDraw()){
             // in this case, draws are losses
-            getRoot().losses++;
-            updateLossDepth();
+            getRoot().wins++;
+            updateWinDepth();
         } else {
             // get available cells
             auto available = board.crossBB | board.noughtBB; 

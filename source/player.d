@@ -61,6 +61,13 @@ class AIPlayer : Player {
                         node.getScore(), "%, depth to win: ", 
                         node.depthToWin == 999 ? "impossible" : to!string(node.depthToWin), ", depth to loss: ", 
                         node.depthToLoss == 999 ? "impossible" : to!string(node.depthToLoss));
+
+
+                // hack so that it can detect instant wins
+                if (node.depthToWin == 0){
+                    writeln("Returning #", i, " since I can win instantly");
+                    return node.moveId;
+                }
                 //playedOutPosition.prettyPrint();
                 moves ~= node;
             }

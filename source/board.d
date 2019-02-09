@@ -11,7 +11,7 @@ class Bitboard {
 
 	/** Creates a new bitboard by setting up the bit arrays **/
 	this(){
-		// due to bullshit, we cannot create BitArrays at compile time, see: https://forum.dlang.org/post/ffxbmjqeigtcnhmbgbsn@forum.dlang.org
+		// due to some bullshit, we can't make BitArrays at compile time, see: https://forum.dlang.org/post/ffxbmjqeigtcnhmbgbsn@forum.dlang.org
 		noughtBB = BitArray(new bool[9]);
 		crossBB = BitArray(new bool[9]);
 		draw = BitArray([1, 1, 1, 1, 1, 1, 1, 1, 1]);
