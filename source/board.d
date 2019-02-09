@@ -1,7 +1,6 @@
 import std.bitmanip : BitArray;
 import std.stdio;
 
-// TODO make this a struct
 class Bitboard {
 	BitArray noughtBB;
 	BitArray crossBB;
@@ -24,7 +23,7 @@ class Bitboard {
 		draw = BitArray([1, 1, 1, 1, 1, 1, 1, 1, 1]);
 	}
 
-	/** Pretty prints the board for humans (NOT the bitboard!) **/
+	/** Pretty prints the board for humans **/
 	void prettyPrint(){
 		writeln("-----------");
 		for (int i = 0; i < 9; i++){

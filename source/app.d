@@ -11,7 +11,7 @@ import utils;
 void main(){
 	auto bitboard = new Bitboard;
 	auto humanPlayer = new HumanPlayer;
-	auto aiPlayer = new AIPlayer;
+	auto aiPlayer = new DFSAgent;
 	
 	writeln("Tic Tac Clap v0.3.1 - a tic tac toe program in D");
 	writeln("(c) 2019 Matt Young, MIT license.");

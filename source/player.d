@@ -32,7 +32,7 @@ class HumanPlayer : Player {
 }
 
 /** AI player using depth first search**/
-class AIPlayer : Player {
+class DFSAgent : Player {
     int getMove(Bitboard board){
         // find all unexplored positions to go down the tree on
         auto boardCpy = new Bitboard(board);
@@ -85,8 +85,25 @@ class AIPlayer : Player {
         writeln("Evaluated ", totalMovesEvaluated, " moves in ", secondsTotal, " seconds (", movesPerSecond, 
                 " moves/second)");
 
+        auto isUnbeatable = true;
+        foreach (ref move; moves){
+            if (move.depthToLoss != 999){
+                isUnbeatable = false;
+                break;
+            }
+        }
+
+        if (isUnbeatable){
+            writeln("NOTICE: Win or draw is now guaranteed.");
+        }
+
         return bestMove.moveId;
     }
+}
 
-
+/** AI player using minimax **/
+class MinimaxAgent : Player {
+    int getMove(Bitboard board){
+        return 0;
+    }
 }

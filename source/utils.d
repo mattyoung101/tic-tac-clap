@@ -2,12 +2,12 @@ import std.stdio;
 import std.string;
 
 char[] input(string question){
-	char[] userInput;
+    char[] userInput;
 
     write(question ~ " ");
     readln(userInput);
     userInput = strip(userInput);
-	toLowerInPlace(userInput);
+    toLowerInPlace(userInput);
 
-	return userInput;
+    return userInput;
 }
