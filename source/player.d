@@ -39,8 +39,6 @@ class DFSAgent : Player {
         auto available = boardCpy.crossBB | boardCpy.noughtBB; 
         available.flip();
         //writeln("Noughts BB: ", boardCpy.noughtBB, "\tCross BB: ", boardCpy.crossBB, "\tAvailable BB: ", available);
-        // TODO auto resign if all scores == inf (it's a guaranteed win/draw)
-        // TODO there's an issue where sometimes the losses aren't calculated properly or something (it's possible to beat)?
 
         Node[] moves;
         search.totalMovesEvaluated = 0;
@@ -85,6 +83,7 @@ class DFSAgent : Player {
         writeln("Evaluated ", totalMovesEvaluated, " moves in ", secondsTotal, " seconds (", movesPerSecond, 
                 " moves/second)");
 
+        // notify the user if the AI is now unbeatable, we don't notify them if a win is impossible since that should never happen
         auto isUnbeatable = true;
         foreach (ref move; moves){
             if (move.depthToLoss != 999){
